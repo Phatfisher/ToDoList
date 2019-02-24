@@ -9,6 +9,7 @@ app.use(express.static("public"));
 app.set('view engine', 'ejs'); 
 
 let items = ["Eat", "Code", "Sleep"]; 
+let workItems = [];
 
 app.get("/", function(req, res){
     
@@ -23,17 +24,41 @@ app.get("/", function(req, res){
    
     res.render("list", 
     {
-        DAY: day, 
+        listTitle: day, 
         DayDescription: dayDescription,
         newListItems: items
+        
     });
     
 });
 
+app.get("/work", function(req,res){
+    let dayDescription ='"'+ quotes.getRandomQuote() + '"' ; 
+        
+
+    res.render("list",{listTitle : "Work List",
+    newListItems: workItems,
+    DayDescription: dayDescription
+    });
+});
+app.post("/work", function(request,response){
+    let item = request.body.newItem;
+    workItems.push(item);
+    response.redirect("/work");
+});
+
 app.post("/", function(request, response){
     let item = request.body.newItem;
-    items.push(item);
-    response.redirect("/");
+    
+    if(request.body.list === "Work"){
+        workItems.push(item);
+        response.redirect("/work");
+    }
+    else
+    {
+        items.push(item);
+        response.redirect("/");
+    }
 });
 
 app.listen(3000, function(){
