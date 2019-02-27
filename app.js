@@ -49,7 +49,7 @@ app.post("/work", function(request,response){
 
 app.post("/", function(request, response){
     let item = request.body.newItem;
-    
+
     if(request.body.list === "Work"){
         workItems.push(item);
         response.redirect("/work");
@@ -59,6 +59,10 @@ app.post("/", function(request, response){
         items.push(item);
         response.redirect("/");
     }
+});
+
+app.get("/about-me", function(req, res){
+    res.render("about");
 });
 
 app.listen(3000, function(){
